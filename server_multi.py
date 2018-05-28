@@ -12,8 +12,8 @@ clients = []
 
 
 def read_requests(r_clients, all_clients):
-    ''' Чтение запросов из списка клиентов
-    '''
+    # Чтение запросов из списка клиентов
+
     responses = {}      # Словарь ответов сервера вида {сокет: запрос}
 
     for sock in r_clients:
@@ -28,17 +28,14 @@ def read_requests(r_clients, all_clients):
 
 
 def write_responses(requests, w_clients, all_clients):
-    ''' Эхо-ответ сервера клиентам, от которых были запросы
-    '''
+    # Эхо-ответ сервера клиентам, от которых были запросы
 
     for sock in w_clients:
-        if sock in requests:
+        for message in requests:
             try:
                 # Подготовить и отправить ответ сервера
-                resp = requests[sock].encode('utf-8')
-                # Эхо-ответ сделаем чуть непохожим на оригинал
-                test_len = sock.send(resp.upper())
-                print(resp)
+                resp = requests[message].encode("utf-8").upper()
+                sock.send(resp)
             except:                 # Сокет недоступен, клиент отключился
                 print('Клиент {} {} отключился'.format(sock.fileno(), sock.getpeername()))
                 sock.close()
@@ -55,8 +52,8 @@ while True:
     finally:
         try:
             who_writes, who_reads, e = select.select(clients, clients, clients, 0)
-            requests = read_requests(who_writes, clients)      # Сохраним запросы клиентов
-            write_responses(requests, who_reads, clients)     # Выполним отправку ответов клиентам
+            reqs = read_requests(who_writes, clients)      # Сохраним запросы клиентов
+            write_responses(reqs, who_reads, clients)     # Выполним отправку ответов клиентам
         except Exception as e:
             print("Ожидаем подключения клиентов")
             pass  # Ничего не делать, если какой-то клиент отключился
