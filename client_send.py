@@ -2,7 +2,7 @@ from socket import *
 
 # клиент который пишет сообщения
 
-ADDRESS = ('localhost', 10000)
+ADDRESS = ('localhost', 7777)
 sock = socket(AF_INET, SOCK_STREAM)
 sock.connect(ADDRESS)
 

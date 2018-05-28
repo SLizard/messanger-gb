@@ -2,7 +2,7 @@ import select
 from socket import socket, AF_INET, SOCK_STREAM
 
 # создать сокет, повешать на адрес
-address = ('', 10000)
+address = ('', 7777)
 s = socket(AF_INET, SOCK_STREAM)
 s.bind(address)
 s.listen(100)
